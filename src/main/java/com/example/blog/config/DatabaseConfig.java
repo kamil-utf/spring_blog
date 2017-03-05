@@ -1,6 +1,5 @@
 package com.example.blog.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -23,9 +22,9 @@ import java.util.Properties;
 public class DatabaseConfig {
 
     private static final String MODEL_LOCATION = "com.example.blog.model";
+
     private final Environment env;
 
-    @Autowired
     public DatabaseConfig(Environment env) {
         this.env = env;
     }
