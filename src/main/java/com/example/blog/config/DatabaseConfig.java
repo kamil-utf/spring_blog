@@ -20,13 +20,13 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.example.blog.repository")
 @PropertySource("classpath:database.properties")
-public class JpaConfig {
+public class DatabaseConfig {
 
     private static final String MODEL_LOCATION = "com.example.blog.model";
     private final Environment env;
 
     @Autowired
-    public JpaConfig(Environment env) {
+    public DatabaseConfig(Environment env) {
         this.env = env;
     }
 
