@@ -12,7 +12,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <spring.version>4.3.7.RELEASE</spring.version>
+        <spring.jpa.version>1.11.1.RELEASE</spring.jpa.version>
+        <spring.security.version>4.2.2.RELEASE</spring.security.version>
+
+        <hibernate.version>5.2.8.Final</hibernate.version>
     </properties>
 
     <dependencies>
@@ -25,14 +30,26 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>1.11.1.RELEASE</version>
+            <version>${spring.jpa.version}</version>
+        </dependency>
+
+        <!-- Spring security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.security.version}</version>
         </dependency>
 
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.2.8.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
 
         <!-- MySQL -->
@@ -40,6 +57,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.40</version>
+        </dependency>
+
+        <!-- SLF4J Logback -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
         </dependency>
 
         <!-- Servlet + JSTL -->
