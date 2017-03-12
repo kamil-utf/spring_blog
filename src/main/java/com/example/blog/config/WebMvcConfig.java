@@ -8,19 +8,25 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.example.blog")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
-	
+
+    @Bean
+    public TilesViewResolver tilesViewResolver() {
+        return new TilesViewResolver();
+    }
+
 	@Bean
-	public InternalResourceViewResolver jspViewResolver() {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix("/WEB-INF/views/");
-		viewResolver.setSuffix(".jsp");
-		return viewResolver;
+	public TilesConfigurer tilesConfigurer() {
+		TilesConfigurer tilesConfigurer = new TilesConfigurer();
+		tilesConfigurer.setDefinitions("/WEB-INF/views/tiles.xml");
+		tilesConfigurer.setCheckRefresh(true);
+		return tilesConfigurer;
 	}
 
 	@Override
