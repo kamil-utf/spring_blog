@@ -37,7 +37,14 @@
 
     <div class="container">
         <div class="row">
-            <tiles:insertAttribute name="body"/>
+
+            <div class="col-md-8">
+                <tiles:insertAttribute name="body"/>
+            </div>
+
+            <div class="col-md-4">
+                <tiles:insertAttribute name="widget"/>
+            </div>
         </div>
     </div>
 

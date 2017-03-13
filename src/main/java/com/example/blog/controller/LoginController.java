@@ -19,12 +19,13 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "login";
+        return "master.login";
     }
 
     @GetMapping("/register")
     public ModelAndView showRegistrationForm() {
-        ModelAndView modelAndView = new ModelAndView("register");
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("master.register");
         modelAndView.addObject("user", new User());
         return modelAndView;
     }

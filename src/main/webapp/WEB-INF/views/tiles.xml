@@ -6,19 +6,12 @@
     <!-- Master template definition -->
     <definition name="master" template="/WEB-INF/views/layouts/master.jsp">
         <put-attribute name="menu" value="/WEB-INF/views/tiles/menu.jsp"></put-attribute>
+        <put-attribute name="widget" value="/WEB-INF/views/tiles/widget.jsp"></put-attribute>
     </definition>
 
-    <!-- Example -->
-    <definition name="index" extends="master">
-        <put-attribute name="body" value="/WEB-INF/views/pages/index.jsp"></put-attribute>
-    </definition>
-
-    <definition name="login" extends="master">
-        <put-attribute name="body" value="/WEB-INF/views/pages/login.jsp"></put-attribute>
-    </definition>
-
-    <definition name="register" extends="master">
-        <put-attribute name="body" value="/WEB-INF/views/pages/register.jsp"></put-attribute>
+    <!-- Wildcard -->
+    <definition name="master.*" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/pages/{1}.jsp"></put-attribute>
     </definition>
 
 </tiles-definitions>

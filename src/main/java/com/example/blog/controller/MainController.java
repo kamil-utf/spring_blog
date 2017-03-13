@@ -9,6 +9,6 @@ public class MainController {
 
 	@GetMapping("/")
 	public String index(ModelMap model) {
-		return "index";
+		return "master.index";
 	}
 }
