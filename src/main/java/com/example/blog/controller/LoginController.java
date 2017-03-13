@@ -4,8 +4,12 @@ import com.example.blog.model.User;
 import com.example.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 public class LoginController {
@@ -28,5 +32,15 @@ public class LoginController {
         modelAndView.setViewName("master.register");
         modelAndView.addObject("user", new User());
         return modelAndView;
+    }
+
+    @PostMapping("/register")
+    public String createNewUser(@Valid User user, BindingResult result) {
+        if(result.hasErrors()) {
+            return "master.register";
+        }
+
+        userService.save(user);
+        return "redirect:/login";
     }
 }
