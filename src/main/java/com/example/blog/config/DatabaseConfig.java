@@ -61,6 +61,7 @@ public class DatabaseConfig {
         properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
         properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.setProperty("javax.persistence.validation.mode", env.getProperty("jpa.validation.mode"));
         return properties;
     }
 }
