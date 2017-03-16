@@ -5,6 +5,7 @@ import com.example.blog.model.User;
 import com.example.blog.repository.AuthorityRepository;
 import com.example.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            AuthorityRepository authorityRepository,
-                           PasswordEncoder passwordEncoder)
+                           @Lazy PasswordEncoder passwordEncoder)
     {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
