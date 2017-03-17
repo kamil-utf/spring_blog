@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,9 +29,7 @@
             </div>
 
             <div class="collapse navbar-collapse" id="menu-navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <tiles:insertAttribute name="menu"/>
-                </ul>
+                <tiles:insertAttribute name="menu"/>
             </div>
         </div>
     </nav>
