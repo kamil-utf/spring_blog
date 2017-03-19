@@ -1,5 +1,6 @@
 package com.example.blog.config;
 
+import com.example.blog.model.Authority;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                    .antMatchers("/admin/**").hasRole(Authority.Role.ADMIN.name())
                     .antMatchers("/").authenticated()
                     .and()
                 .formLogin()
