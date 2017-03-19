@@ -9,9 +9,14 @@
         <put-attribute name="widget" value="/WEB-INF/views/tiles/widget.jsp"></put-attribute>
     </definition>
 
+    <!-- Admin template definition -->
+    <definition name="admin" extends="master">
+        <put-attribute name="menu" value="/WEB-INF/views/tiles/navigation.jsp"></put-attribute>
+    </definition>
+
     <!-- Wildcard -->
-    <definition name="master.*" extends="master">
-        <put-attribute name="body" value="/WEB-INF/views/pages/{1}.jsp"></put-attribute>
+    <definition name="*.*" extends="{1}">
+        <put-attribute name="body" value="/WEB-INF/views/pages/{1}/{2}.jsp"></put-attribute>
     </definition>
 
 </tiles-definitions>
