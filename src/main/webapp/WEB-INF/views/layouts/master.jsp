@@ -30,6 +30,21 @@
 
             <div class="collapse navbar-collapse" id="menu-navbar-collapse">
                 <tiles:insertAttribute name="menu"/>
+
+                <sec:authorize access="isAuthenticated()">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" onclick="   event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+
+                            <form id="logout-form" action="<c:url value='/logout'/>" method="post" style="display: none;">
+                                <sec:csrfInput/>
+                            </form>
+                        </li>
+                    </ul>
+                </sec:authorize>
             </div>
         </div>
     </nav>
