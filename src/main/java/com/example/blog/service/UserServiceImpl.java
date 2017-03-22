@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(INSTANT_ACCOUNT_ACTIVATION);
