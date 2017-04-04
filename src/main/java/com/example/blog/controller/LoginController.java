@@ -4,12 +4,13 @@ import com.example.blog.model.User;
 import com.example.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class LoginController {
@@ -22,20 +23,18 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String showLoginForm() {
-        return "login";
+    public String login(Principal principal) {
+        return principal == null ? "login" : "redirect:/";
     }
 
     @GetMapping("/register")
-    public ModelAndView showRegistrationForm() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("register");
-        modelAndView.addObject("user", new User());
-        return modelAndView;
+    public String register(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
     }
 
     @PostMapping("/register")
-    public String createNewUser(@Valid User user, BindingResult result) {
+    public String createUser(@Valid User user, BindingResult result) {
         if(result.hasErrors()) {
             return "register";
         }
