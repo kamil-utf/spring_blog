@@ -23,13 +23,13 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "master.login";
+        return "login";
     }
 
     @GetMapping("/register")
     public ModelAndView showRegistrationForm() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("master.register");
+        modelAndView.setViewName("register");
         modelAndView.addObject("user", new User());
         return modelAndView;
     }
@@ -37,7 +37,7 @@ public class LoginController {
     @PostMapping("/register")
     public String createNewUser(@Valid User user, BindingResult result) {
         if(result.hasErrors()) {
-            return "master.register";
+            return "register";
         }
 
         userService.save(user);
