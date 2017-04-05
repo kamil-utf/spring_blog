@@ -9,6 +9,9 @@
 
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">MyBlog</title>
 
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet'  type='text/css'>
+
     <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/static/css/style.css}">
 </head>
@@ -36,6 +39,14 @@
                         </a>
 
                         <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                    </li>
+                </ul>
+                <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+                    <li><a th:href="@{/login}">Sign in</a></li>
+                    <li>
+                        <p class="navbar-btn">
+                            <a th:href="@{/register}" class="btn btn-primary">Sign up</a>
+                        </p>
                     </li>
                 </ul>
             </div>
