@@ -18,7 +18,7 @@
                             <label for="username" class="col-md-3 control-label">Username: </label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Choose an username" required/>
-                                <span class="help-block" th:if="${#fields.hasErrors('username')}" th:errros="*{username}"></span>
+                                <span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                             </div>
                         </div>
 

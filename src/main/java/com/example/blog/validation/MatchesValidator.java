@@ -29,14 +29,14 @@ public class MatchesValidator implements ConstraintValidator<Matches, Object> {
         Object verifier = beanWrapper.getPropertyValue(verifierName);
 
         if(property == null || !property.equals(verifier)) {
-            buildConstraintValidation(context);
+            buildConstraintViolation(context);
             return false;
         }
 
         return true;
     }
 
-    private void buildConstraintValidation(ConstraintValidatorContext context) {
+    private void buildConstraintViolation(ConstraintValidatorContext context) {
         context.disableDefaultConstraintViolation();
         context
                 .buildConstraintViolationWithTemplate(propertyName + " does not match " + verifierName)

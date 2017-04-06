@@ -1,6 +1,7 @@
 package com.example.blog.model;
 
 import com.example.blog.validation.Matches;
+import com.example.blog.validation.Unique;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Unique(property = "username")
 @Matches(property = "password", verifier = "confirmPassword")
 public class User {
 
