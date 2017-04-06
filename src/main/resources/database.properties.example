@@ -1,6 +1,6 @@
 # DATASOURCE
 datasource.driverClassName = com.mysql.jdbc.Driver
-datasource.url = jdbc:mysql://localhost:3306/db_name
+datasource.url = jdbc:mysql://localhost:3306/db_name?useUnicode=true&characterEncoding=utf8
 datasource.username = db_user
 datasource.password = db_password
 

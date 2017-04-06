@@ -27,9 +27,10 @@ public class AppInitializer implements WebApplicationInitializer {
 		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping(MAPPING_URL);
 
-        FilterRegistration.Dynamic hiddenHttpMethodFilter
+		// Hidden Http Method Filter
+		FilterRegistration.Dynamic hiddenHttpMethodFilter
                 = servletContext.addFilter("hiddenHttpMethodFilter", HiddenHttpMethodFilter.class);
-	    hiddenHttpMethodFilter.addMappingForUrlPatterns(null, false, "/*");
+		hiddenHttpMethodFilter.addMappingForUrlPatterns(null, false, "/*");
 	}
 	
 	private AnnotationConfigWebApplicationContext getWebContext() {
