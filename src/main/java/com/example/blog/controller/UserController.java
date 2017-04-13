@@ -5,16 +5,17 @@ import com.example.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin/users")
 public class UserController {
+
+    private static final String ADMIN_PREFIX = "/admin/users";
 
     private final UserService userService;
 
@@ -30,9 +31,26 @@ public class UserController {
         return "user/browse";
     }
 
-    @DeleteMapping("/{userId}/delete")
+    @GetMapping("/{userId}/edit")
+    public String editUser(@PathVariable Long userId, Model model) {
+        User user = userService.findById(userId);
+        model.addAttribute("user", user);
+        return "user/edit";
+    }
+
+    @PutMapping("/{userId}")
+    public String updateUser(@Valid User user, BindingResult result) {
+        if(result.hasErrors()) {
+            return "user/edit";
+        }
+
+        userService.update(user);
+        return "redirect:/" + ADMIN_PREFIX;
+    }
+
+    @DeleteMapping("/{userId}")
     public String removeUser(@PathVariable Long userId) {
         userService.delete(userId);
-        return "redirect:/admin/users";
+        return "redirect:/" + ADMIN_PREFIX;
     }
 }

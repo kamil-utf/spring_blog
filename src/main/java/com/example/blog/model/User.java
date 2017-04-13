@@ -2,19 +2,24 @@ package com.example.blog.model;
 
 import com.example.blog.validation.Matches;
 import com.example.blog.validation.Unique;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@DynamicUpdate
 @Unique(property = "username")
-@Matches(property = "password", verifier = "confirmPassword")
+@Matches(property = "password", verifier = "confirmPassword", groups = User.PasswordChecks.class)
 public class User {
+
+    public interface PasswordChecks extends Default {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +33,8 @@ public class User {
     @Email
     private String email;
 
-    @NotNull
-    @Size(min = 6, max = 20)
+    @NotNull(groups = PasswordChecks.class)
+    @Size(min = 6, max = 20, groups = PasswordChecks.class)
     private String password;
 
     @Transient

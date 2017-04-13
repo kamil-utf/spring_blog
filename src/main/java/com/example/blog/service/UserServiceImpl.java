@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User save(User user) {
+    public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(INSTANT_ACCOUNT_ACTIVATION);
 
@@ -59,7 +59,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Authority userAuth = authorityRepository.findByRole(Authority.Role.USER);
         user.setAuthorities(new HashSet<>(Arrays.asList(userAuth)));
 
-        return userRepository.save(user);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void update(User user) {
+        User oldUser = userRepository.findById(user.getId());
+        user.setPassword(
+                user.getPassword() != null
+                ? passwordEncoder.encode(user.getPassword())
+                : oldUser.getPassword()
+        );
+
+        userRepository.save(user);
     }
 
     @Override

@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -34,7 +34,7 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public String createUser(@Valid User user, BindingResult result) {
+    public String createUser(@Validated(User.PasswordChecks.class) User user, BindingResult result) {
         if(result.hasErrors()) {
             return "register";
         }
