@@ -1,11 +1,13 @@
 package com.example.blog.config;
 
+import com.example.blog.format.AuthorityFormatter;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -20,9 +22,20 @@ import org.thymeleaf.templatemode.TemplateMode;
 @ComponentScan(basePackages = "com.example.blog")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
+	private final AuthorityFormatter authorityFormatter;
+
+	public WebMvcConfig(AuthorityFormatter authorityFormatter) {
+		this.authorityFormatter = authorityFormatter;
+	}
+
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+	}
+
+	@Override
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addFormatter(authorityFormatter);
 	}
 
 	@Bean
