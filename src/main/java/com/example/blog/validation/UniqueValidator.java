@@ -1,5 +1,6 @@
 package com.example.blog.validation;
 
+import com.example.blog.util.EntityUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
@@ -30,29 +31,37 @@ public class UniqueValidator implements ConstraintValidator<Unique, Object> {
             return true;
         }
 
+        String identifierName = EntityUtils.getIdentifierName(target);
+
+        // Get property values from the specified bean
         BeanWrapper beanWrapper
                 = PropertyAccessorFactory.forBeanPropertyAccess(target);
+        Object identifier = beanWrapper.getPropertyValue(identifierName);
         Object property = beanWrapper.getPropertyValue(propertyName);
-        Long count = countOccurrences(target, propertyName, property);
+
+        // Count occurrences of unique values
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
+
+        Root from = criteriaQuery.from(target.getClass());
+        criteriaQuery.select(criteriaBuilder.count(from));
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(from.get(propertyName), property),
+                        identifier == null
+                                ? criteriaBuilder.isNotNull(from.get(identifierName))
+                                : criteriaBuilder.notEqual(from.get(identifierName), identifier)
+                )
+        );
+
+        Query query = entityManager.createQuery(criteriaQuery);
+        Long count = (Long) query.getSingleResult();
         if(count > 0) {
             buildConstraintViolation(context);
             return false;
         }
 
         return true;
-    }
-
-    private Long countOccurrences(Object target, String propertyName, Object property) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
-
-        Root from = criteriaQuery.from(target.getClass());
-        criteriaQuery.select(criteriaBuilder.count(from));
-        criteriaQuery.where(criteriaBuilder.equal(from.get(propertyName), property));
-
-        // Execute query
-        Query query = entityManager.createQuery(criteriaQuery);
-        return (Long) query.getSingleResult();
     }
 
     private void buildConstraintViolation(ConstraintValidatorContext context) {
