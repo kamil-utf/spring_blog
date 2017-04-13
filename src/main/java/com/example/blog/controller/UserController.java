@@ -45,12 +45,12 @@ public class UserController {
         }
 
         userService.update(user);
-        return "redirect:/" + ADMIN_PREFIX;
+        return "redirect:" + ADMIN_PREFIX;
     }
 
     @DeleteMapping("/{userId}")
     public String removeUser(@PathVariable Long userId) {
         userService.delete(userId);
-        return "redirect:/" + ADMIN_PREFIX;
+        return "redirect:" + ADMIN_PREFIX;
     }
 }
