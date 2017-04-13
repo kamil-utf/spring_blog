@@ -1,5 +1,6 @@
 package com.example.blog.service;
 
+import com.example.blog.exception.IllegalOperationException;
 import com.example.blog.model.Authority;
 import com.example.blog.model.User;
 import com.example.blog.repository.AuthorityRepository;
@@ -21,6 +22,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private static final boolean INSTANT_ACCOUNT_ACTIVATION = true;
+    private static final String  DEFAULT_PASSWORD = "12345678";
 
     private static final boolean ACCOUNT_NON_EXPIRED = true;
     private static final boolean PASSWORD_NON_EXPIRED = true;
@@ -65,9 +67,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void update(User user) {
         User oldUser = userRepository.findById(user.getId());
+        Long numberOfAdmins = userRepository.countByAuthorities_Role(Authority.Role.ADMIN);
+
+        // Check if the system has at least one administrator
+        if(!isAdmin(user) && isAdmin(oldUser) && numberOfAdmins < 2) {
+            throw new IllegalOperationException("System must have at least one administrator!");
+        }
+
         user.setPassword(
                 user.getPassword() != null
-                ? passwordEncoder.encode(user.getPassword())
+                ? passwordEncoder.encode(DEFAULT_PASSWORD)
                 : oldUser.getPassword()
         );
 
@@ -104,5 +113,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         return grantedAuthorities;
+    }
+
+    private boolean isAdmin(User user) {
+        Set<Authority> authorities = user.getAuthorities();
+        return authorities.stream()
+                .anyMatch(auth -> auth.getRole().equals(Authority.Role.ADMIN));
     }
 }

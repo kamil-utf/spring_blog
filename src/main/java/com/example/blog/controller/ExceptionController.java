@@ -1,5 +1,6 @@
 package com.example.blog.controller;
 
+import com.example.blog.exception.IllegalOperationException;
 import com.example.blog.exception.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,4 +15,9 @@ public class ExceptionController {
     public void resourceNotFound(HttpServletResponse response, ResourceNotFoundException ex) throws IOException {
         response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage());
     }
-}
+
+    @ExceptionHandler(IllegalOperationException.class)
+    public void illegalOperation(HttpServletResponse response, IllegalOperationException ex) throws IOException {
+        response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, ex.getMessage());
+    }
+ }
