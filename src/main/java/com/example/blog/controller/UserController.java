@@ -1,5 +1,7 @@
 package com.example.blog.controller;
 
+import com.example.blog.exception.ResourceNotFoundException;
+import com.example.blog.model.Authority;
 import com.example.blog.model.User;
 import com.example.blog.service.AuthorityService;
 import com.example.blog.service.UserService;
@@ -10,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -26,6 +29,11 @@ public class UserController {
         this.authorityService = authorityService;
     }
 
+    @ModelAttribute("allAuthorities")
+    public List<Authority> authorities() {
+        return authorityService.findAll();
+    }
+
     @GetMapping
     public String browseUsers(Model model) {
         model.addAttribute("users", userService.findAll());
@@ -33,14 +41,18 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/edit")
-    public String editUser(@PathVariable Long userId, Model model) {
-        model.addAttribute("user", userService.findById(userId));
-        model.addAttribute("allAuthorities", authorityService.findAll());
+    public String editUser(@PathVariable Long userId, Model model) throws ResourceNotFoundException {
+        User user = userService.findById(userId);
+        if(user == null) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found!");
+        }
+
+        model.addAttribute("user", user);
         return "user/edit";
     }
 
     @PutMapping("/{userId}")
-    public String updateUser(@Valid User user, BindingResult result) {
+    public String updateUser(@Valid User user, BindingResult result, Model model) {
         if(result.hasErrors()) {
             return "user/edit";
         }
