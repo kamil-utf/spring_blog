@@ -31,6 +31,8 @@
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-content">
+                <div th:replace="fragments/menu :: menu"></div>
+
                 <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
                     <li>
                         <a href="#" onclick="   event.preventDefault();

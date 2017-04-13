@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+    <div th:fragment="menu" class="nav navbar-nav">
+        <li sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{/admin/users}">Users</a>
+        </li>
+    </div>
+</body>
+</html>
