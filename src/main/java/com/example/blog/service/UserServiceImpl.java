@@ -3,12 +3,12 @@ package com.example.blog.service;
 import com.example.blog.exception.IllegalOperationException;
 import com.example.blog.model.Authority;
 import com.example.blog.model.User;
+import com.example.blog.model.UserAuditDetails;
 import com.example.blog.repository.AuthorityRepository;
 import com.example.blog.repository.UserRepository;
+import com.example.blog.util.AuthorityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,17 +16,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private static final boolean INSTANT_ACCOUNT_ACTIVATION = true;
     private static final String  DEFAULT_PASSWORD = "12345678";
-
-    private static final boolean ACCOUNT_NON_EXPIRED = true;
-    private static final boolean PASSWORD_NON_EXPIRED = true;
-    private static final boolean ACCOUNT_NON_LOCKED = true;
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
@@ -67,10 +65,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void update(User user) {
         User oldUser = userRepository.findById(user.getId());
-        Long numberOfAdmins = userRepository.countByAuthorities_Role(Authority.Role.ADMIN);
 
         // Check if the system has at least one administrator
-        if(!isAdmin(user) && isAdmin(oldUser) && numberOfAdmins < 2) {
+        if(!AuthorityUtils.isAdmin(user) && AuthorityUtils.isAdmin(oldUser) && countAdmins() < 2) {
             throw new IllegalOperationException("System must have at least one administrator!");
         }
 
@@ -85,7 +82,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void delete(Long id) {
-        userRepository.delete(id);
+        User user = userRepository.findById(id);
+
+        // Check if the system has at least one administrator
+        if(AuthorityUtils.isAdmin(user) && countAdmins() < 2) {
+            throw new IllegalOperationException("System must have at least one administrator!");
+        }
+
+        userRepository.delete(user);
     }
 
     @Override
@@ -96,28 +100,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new UsernameNotFoundException("User " + username + " not found!");
         }
 
-        Collection<? extends GrantedAuthority> authorities = convertAuthorities(user);
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(), user.getPassword(), user.isEnabled(),
-                ACCOUNT_NON_EXPIRED, PASSWORD_NON_EXPIRED, ACCOUNT_NON_LOCKED, authorities
-        );
+        return new UserAuditDetails(user);
     }
 
-    private Collection<? extends GrantedAuthority> convertAuthorities(User user) {
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for(Authority authority : user.getAuthorities()) {
-            grantedAuthorities.add(
-                    new SimpleGrantedAuthority(authority.getRole().getFullName())
-            );
-        }
-
-        return grantedAuthorities;
-    }
-
-    private boolean isAdmin(User user) {
-        Set<Authority> authorities = user.getAuthorities();
-        return authorities.stream()
-                .anyMatch(auth -> auth.getRole().equals(Authority.Role.ADMIN));
+    private Long countAdmins() {
+        return userRepository.countByAuthorities_Role(Authority.Role.ADMIN);
     }
 }
