@@ -12,19 +12,26 @@ import java.util.Set;
 public class AuthorityUtils {
 
     public static Collection<? extends GrantedAuthority> convertAuthorityList(User user) {
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for(Authority authority : user.getAuthorities()) {
-            grantedAuthorities.add(
-                    new SimpleGrantedAuthority(authority.getRole().getFullName())
-            );
+        Set<GrantedAuthority> grantedAuthorities = null;
+        if(user != null) {
+            grantedAuthorities = new HashSet<>();
+            for (Authority authority : user.getAuthorities()) {
+                grantedAuthorities.add(
+                        new SimpleGrantedAuthority(authority.getRole().getFullName())
+                );
+            }
         }
 
         return grantedAuthorities;
     }
 
     public static boolean isAdmin(User user) {
-        Set<Authority> authorities = user.getAuthorities();
-        return authorities.stream()
-                .anyMatch(auth -> auth.getRole().equals(Authority.Role.ADMIN));
+        if(user != null) {
+            Set<Authority> authorities = user.getAuthorities();
+            return authorities.stream()
+                    .anyMatch(auth -> auth.getRole().equals(Authority.Role.ADMIN));
+        }
+
+        return false;
     }
 }

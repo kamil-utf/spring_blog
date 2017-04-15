@@ -4,9 +4,11 @@ import com.example.blog.model.Authority;
 import com.example.blog.repository.AuthorityRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class AuthorityServiceImpl implements AuthorityService {
 
     private final AuthorityRepository authorityRepository;
@@ -21,7 +23,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public Authority findById(Long id) {
+    public Authority findById(final Long id) {
         return authorityRepository.findById(id);
     }
 }

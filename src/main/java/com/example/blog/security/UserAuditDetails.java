@@ -1,5 +1,6 @@
-package com.example.blog.model;
+package com.example.blog.security;
 
+import com.example.blog.model.User;
 import com.example.blog.util.AuthorityUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

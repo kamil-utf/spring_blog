@@ -1,9 +1,13 @@
 package com.example.blog.config;
 
+import com.example.blog.model.User;
+import com.example.blog.security.SpringSecurityAuditorAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -18,6 +22,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.example.blog.repository")
+@EnableJpaAuditing
 @PropertySource("classpath:database.properties")
 public class DatabaseConfig {
 
@@ -54,6 +59,11 @@ public class DatabaseConfig {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
+    }
+
+    @Bean
+    public AuditorAware<User> auditorProvider() {
+        return new SpringSecurityAuditorAware();
     }
 
     private Properties jpaProperties() {

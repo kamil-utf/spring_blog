@@ -63,7 +63,9 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public String removeUser(@PathVariable Long userId) {
-        userService.delete(userId);
+        User user = userService.findById(userId);
+
+        userService.delete(user);
         return "redirect:" + ADMIN_PREFIX;
     }
 }

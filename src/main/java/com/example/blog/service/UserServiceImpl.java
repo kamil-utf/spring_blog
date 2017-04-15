@@ -3,9 +3,9 @@ package com.example.blog.service;
 import com.example.blog.exception.IllegalOperationException;
 import com.example.blog.model.Authority;
 import com.example.blog.model.User;
-import com.example.blog.model.UserAuditDetails;
 import com.example.blog.repository.AuthorityRepository;
 import com.example.blog.repository.UserRepository;
+import com.example.blog.security.UserAuditDetails;
 import com.example.blog.util.AuthorityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private static final boolean INSTANT_ACCOUNT_ACTIVATION = true;
@@ -46,12 +47,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(final Long id) {
         return userRepository.findById(id);
     }
 
     @Override
-    public void save(User user) {
+    public void save(final User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(INSTANT_ACCOUNT_ACTIVATION);
 
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void update(User user) {
+    public void update(final User user) {
         User oldUser = userRepository.findById(user.getId());
 
         // Check if the system has at least one administrator
@@ -81,9 +82,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void delete(Long id) {
-        User user = userRepository.findById(id);
-
+    public void delete(final User user) {
         // Check if the system has at least one administrator
         if(AuthorityUtils.isAdmin(user) && countAdmins() < 2) {
             throw new IllegalOperationException("System must have at least one administrator!");
@@ -93,8 +92,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if(user == null) {
             throw new UsernameNotFoundException("User " + username + " not found!");
