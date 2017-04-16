@@ -33,7 +33,17 @@
 
                     <div class="form-group">
                         <div class="col-md-offset-3 col-md-9">
-                            <div class="checkbox">
+                            <button type="button" class="btn btn-warning" data-toggle="modal"data-target="#confirmPasswd"
+                                    th:attr="data-url=@{'/admin/users/' + ${user.id} + '/passwd'}">
+                                Reset password
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="enabled" class="col-md-3 control-label">Account: </label>
+                        <div class="col-md-9">
+                            <div class="checkbox" id="enabled">
                                 <label><input type="checkbox" th:field="*{enabled}"/> Enable</label>
                             </div>
                         </div>
@@ -61,6 +71,17 @@
                 <p>Widget</p>
             </div>
         </div>
+        <th:block layout:insert="fragments/modal
+            :: modal(   mId='confirmPasswd', mMethod='post', mTitle='Reset password (default: 12345678)',
+                        mContent='Are you sure you want to reset password this user?', mButton='Reset')">
+        </th:block>
     </div>
+
+
+    <script layout:fragment="script">
+        $('#confirmPasswd').on('show.bs.modal', function(event) {
+            $('#modalForm').attr('action', $(event.relatedTarget).data('url'));
+        });
+    </script>
 </body>
 </html>

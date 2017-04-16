@@ -68,4 +68,12 @@ public class UserController {
         userService.delete(user);
         return "redirect:" + ADMIN_PREFIX;
     }
+
+    @PostMapping("/{userId}/passwd")
+    public String resetUserPassword(@PathVariable Long userId) {
+        User user = userService.findById(userId);
+
+        userService.resetPassword(user);
+        return "redirect:" + ADMIN_PREFIX;
+    }
 }

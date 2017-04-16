@@ -72,12 +72,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new IllegalOperationException("System must have at least one administrator!");
         }
 
-        user.setPassword(
-                user.getPassword() != null
-                ? passwordEncoder.encode(DEFAULT_PASSWORD)
-                : oldUser.getPassword()
-        );
-
+        user.setPassword(oldUser.getPassword());
         userRepository.save(user);
     }
 
@@ -89,6 +84,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         userRepository.delete(user);
+    }
+
+    @Override
+    public void resetPassword(final User user) {
+        user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+        userRepository.save(user);
     }
 
     @Override
