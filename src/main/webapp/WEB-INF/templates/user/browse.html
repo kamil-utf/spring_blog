@@ -8,6 +8,11 @@
     <div layout:fragment="content">
         <div class="row">
             <div class="col-md-12">
+                <h3>Users <small>List of users</small></h3>
+            </div>
+        </div>
+        <div class="row v-offset-15">
+            <div class="col-md-12">
                 <table class="table table-vcenter" th:with="self = ${#authentication.principal.user}">
                     <thead>
                         <th>#</th>

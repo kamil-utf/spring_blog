@@ -6,3 +6,7 @@ body {
 .table-vcenter td {
     vertical-align: middle!important;
 }
+
+.v-offset-15 {
+    margin-top: 15px;
+}
