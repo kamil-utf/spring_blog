@@ -14,6 +14,6 @@ public class SpringSecurityAuditorAware implements AuditorAware<User> {
             return null;
         }
 
-        return ((UserAuditDetails) authentication.getDetails()).getUser();
+        return ((UserAuditDetails) authentication.getPrincipal()).getUser();
     }
 }

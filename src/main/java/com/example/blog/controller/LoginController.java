@@ -22,6 +22,11 @@ public class LoginController {
         this.userService = userService;
     }
 
+    @GetMapping("/")
+    public String index() {
+        return "index";
+    }
+
     @GetMapping("/login")
     public String login(Principal principal) {
         return principal == null ? "login" : "redirect:/";

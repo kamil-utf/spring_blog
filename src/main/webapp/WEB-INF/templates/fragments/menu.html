@@ -4,6 +4,9 @@
 <body>
     <div th:fragment="menu" class="nav navbar-nav">
         <li><a th:href="@{/}">Home</a></li>
+        <li sec:authorize="hasRole('ROLE_WRITER')">
+            <a th:href="@{/writer/posts}">Posts</a>
+        </li>
         <li sec:authorize="hasRole('ROLE_ADMIN')">
             <a th:href="@{/admin/users}">Users</a>
         </li>
