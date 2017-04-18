@@ -24,7 +24,8 @@ public class PostController {
 	}
 
 	@GetMapping(WRITER_PREFIX)
-	public String browsePosts() {
+	public String browsePosts(Model model) {
+		model.addAttribute("posts", postService.findAll());
 		return "post/browse";
 	}
 

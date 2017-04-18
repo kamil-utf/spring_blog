@@ -16,7 +16,33 @@
         </div>
         <div class="row v-offset-15">
             <div class="col-md-12">
-                POSTS
+                <table class="table table-vcenter">
+                    <thead>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Created at</th>
+                        <th>Updated at</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        <tr th:each="post : ${posts}">
+                            <td th:text="${post.id}">0</td>
+                            <td th:text="${post.title}">title</td>
+                            <td th:text="${post.author.username}">author</td>
+                            <td th:text="${post.createdDate}">created date</td>
+                            <td th:text="${post.lastModifiedDate}">last modified date</td>
+                            <td>
+                                <a href="#" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                                </a>
+                                <button type="button" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-trash"></span> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
