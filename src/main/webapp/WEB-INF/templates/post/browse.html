@@ -36,7 +36,9 @@
                                 <a href="#" class="btn btn-default">
                                     <span class="glyphicon glyphicon-pencil"></span> Edit
                                 </a>
-                                <button type="button" class="btn btn-default">
+
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmDelete"
+                                        th:attr="data-url=@{'/writer/posts/' + ${post.id}}">
                                     <span class="glyphicon glyphicon-trash"></span> Delete
                                 </button>
                             </td>
@@ -45,6 +47,17 @@
                 </table>
             </div>
         </div>
+        <th:block layout:insert="fragments/modal
+            :: modal(   mId='confirmDelete', mMethod='delete', mTitle='Delete post',
+                        mContent='Are you sure you want to delete this post?', mButton='Delete')">
+        </th:block>
     </div>
+
+
+    <script layout:fragment="script">
+        $('#confirmDelete').on('show.bs.modal', function(event) {
+            $('#modalForm').attr('action', $(event.relatedTarget).data('url'));
+        });
+    </script>
 </body>
 </html>
