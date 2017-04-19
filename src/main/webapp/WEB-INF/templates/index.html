@@ -6,7 +6,44 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <p>Top Secret ~Spring</p>
+        <div class="row">
+            <div class="col-md-8">
+                <article th:each="post : ${posts.content}" class="vb-offset-15">
+                    <h3 th:text="${post.title}">Blog post title</h3>
+                    <p>
+                        Posted by <span class="glyphicon glyphicon-user"></span>
+                        <th:block th:text="${post.author.username}">Author</th:block>
+                        , on <span class="glyphicon glyphicon-time"></span>
+                        <th:block th:text="${#dates.format(post.createdDate, 'dd/MM/yyyy HH:mm')}">Created date</th:block>
+                    </p>
+                    <hr>
+                    ...
+                    <hr>
+                    <p th:utext="${#strings.abbreviate(post.content, 400)}">Blog post content</p>
+                    <a href="#" class="btn btn-primary">Read more &raquo;</a>
+                </article>
+
+                <ul class="pagination">
+                    <li th:classappend="${current == 1} ? 'disabled' : ''">
+                        <a th:href="@{${current == 1} ? '#' : '/posts/' + ${current - 1}}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(begin, end)}" th:classappend="${i == current} ? 'active' : ''">
+                        <a th:href="@{'/posts/' + ${i}}" th:text="${i}">index</a>
+                    </li>
+                    <li th:classappend="${current == posts.totalPages} ? 'disabled' : ''">
+                       <a th:href="@{${current == posts.totalPages} ? '#' : '/posts/' + ${current + 1}}">
+                           <span aria-hidden="true">&raquo;</span>
+                       </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+
+            </div>
+        </div>
     </div>
 </body>
 </html>

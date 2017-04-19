@@ -1,29 +1,51 @@
 package com.example.blog.controller;
 
+import com.example.blog.model.Post;
 import com.example.blog.model.User;
+import com.example.blog.service.PostService;
 import com.example.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
-public class LoginController {
+public class BlogController {
 
+    public static final int PAGE_SIZE = 2;
+
+    private static final int PAGE_INIT = 1;
+    private static final int PAGE_SHIFT = 3;
+
+    private final PostService postService;
     private final UserService userService;
 
     @Autowired
-    public LoginController(UserService userService) {
+    public BlogController(PostService postService, UserService userService) {
+        this.postService = postService;
         this.userService = userService;
     }
 
-    @GetMapping("/")
-    public String index() {
+    @GetMapping({"/", "/posts", "/posts/{pageNumber}"})
+    public String index(@PathVariable Optional<Integer> pageNumber, Model model) {
+        Page<Post> page = postService.findAll(pageNumber.orElse(PAGE_INIT));
+
+        int current = page.getNumber() + 1;
+        int begin = Math.max(1, current - PAGE_SHIFT);
+        int end = Math.min(current + PAGE_SHIFT, page.getTotalPages());
+
+        model.addAttribute("posts", page);
+        model.addAttribute("current", current);
+        model.addAttribute("begin", begin);
+        model.addAttribute("end", end);
         return "index";
     }
 

@@ -10,3 +10,7 @@ body {
 .v-offset-15 {
     margin-top: 15px;
 }
+
+.vb-offset-15 {
+    margin-bottom: 15px;
+}
