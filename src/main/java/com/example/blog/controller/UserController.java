@@ -15,10 +15,10 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin/users")
+@RequestMapping(UserController.ADMIN_PREFIX)
 public class UserController {
 
-    private static final String ADMIN_PREFIX = "/admin/users";
+    public static final String ADMIN_PREFIX = "/admin/users";
 
     private final UserService userService;
     private final AuthorityService authorityService;
@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/{userId}/edit")
     public String editUser(@PathVariable Long userId, Model model) throws ResourceNotFoundException {
-        User user = userService.findById(userId);
+        User user = userService.findOne(userId);
         if(user == null) {
             throw new ResourceNotFoundException("User with id " + userId + " not found!");
         }
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public String updateUser(@Valid User user, BindingResult result, Model model) {
+    public String updateUser(@Valid User user, BindingResult result) {
         if(result.hasErrors()) {
             return "user/edit";
         }
@@ -63,7 +63,7 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public String removeUser(@PathVariable Long userId) {
-        User user = userService.findById(userId);
+        User user = userService.findOne(userId);
 
         userService.delete(user);
         return "redirect:" + ADMIN_PREFIX;
@@ -71,7 +71,7 @@ public class UserController {
 
     @PostMapping("/{userId}/passwd")
     public String resetUserPassword(@PathVariable Long userId) {
-        User user = userService.findById(userId);
+        User user = userService.findOne(userId);
 
         userService.resetPassword(user);
         return "redirect:" + ADMIN_PREFIX;

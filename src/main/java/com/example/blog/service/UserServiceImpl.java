@@ -47,8 +47,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findById(final Long id) {
-        return userRepository.findById(id);
+    public User findOne(final Long id) {
+        return userRepository.findOne(id);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void update(final User user) {
-        User oldUser = userRepository.findById(user.getId());
+        User oldUser = userRepository.findOne(user.getId());
 
         // Check if the system has at least one administrator
         if(!AuthorityUtils.isAdmin(user) && AuthorityUtils.isAdmin(oldUser) && countAdmins() < 2) {
