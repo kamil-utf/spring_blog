@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PostService {
     List<Post> findAll();
-    Post findById(Long id);
-    void save(Post post);
+    Post findOne(Long id);
+    void saveOrUpdate(Post post);
     void delete(Post post);
 }

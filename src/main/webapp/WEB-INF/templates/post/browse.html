@@ -33,7 +33,7 @@
                             <td th:text="${post.createdDate}">created date</td>
                             <td th:text="${post.lastModifiedDate}">last modified date</td>
                             <td>
-                                <a href="#" class="btn btn-default">
+                                <a th:href="@{'/writer/posts/' + ${post.id} + '/edit'}" class="btn btn-default">
                                     <span class="glyphicon glyphicon-pencil"></span> Edit
                                 </a>
 
