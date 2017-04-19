@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="master">
+<head>
+    <title>Posts</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="row">
+            <div class="col-md-8">
+                <article class="vb-offset-15">
+                    <h3 th:text="${post.title}">Blog post title</h3>
+                    <p>
+                        Posted by <span class="glyphicon glyphicon-user"></span>
+                        <th:block th:text="${post.author.username}">Author</th:block>
+                        , on <span class="glyphicon glyphicon-time"></span>
+                        <th:block th:text="${#dates.format(post.createdDate, 'dd/MM/yyyy HH:mm')}">Created date</th:block>
+                    </p>
+                    <hr>
+                    ...
+                    <hr>
+                    <p th:utext="${post.content}">Blog post content</p>
+                </article>
+            </div>
+
+            <div class="col-md-4">
+
+            </div>
+        </div>
+    </div>
+</body>

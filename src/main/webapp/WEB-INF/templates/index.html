@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="master">
 <head>
-    <title>Index</title>
+    <title>Posts</title>
 </head>
 <body>
     <div layout:fragment="content">
@@ -20,7 +20,9 @@
                     ...
                     <hr>
                     <p th:utext="${#strings.abbreviate(post.content, 400)}">Blog post content</p>
-                    <a href="#" class="btn btn-primary">Read more &raquo;</a>
+                    <a th:href="@{'/posts/' + ${post.id} + '/details'}" class="btn btn-primary">
+                        Read more &raquo;
+                    </a>
                 </article>
 
                 <ul class="pagination">

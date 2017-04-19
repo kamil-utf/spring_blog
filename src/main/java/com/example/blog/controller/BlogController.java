@@ -1,5 +1,6 @@
 package com.example.blog.controller;
 
+import com.example.blog.exception.ResourceNotFoundException;
 import com.example.blog.model.Post;
 import com.example.blog.model.User;
 import com.example.blog.service.PostService;
@@ -47,6 +48,17 @@ public class BlogController {
         model.addAttribute("begin", begin);
         model.addAttribute("end", end);
         return "index";
+    }
+
+    @GetMapping("/posts/{postId}/details")
+    public String showPost(@PathVariable Long postId, Model model) throws ResourceNotFoundException {
+        Post post = postService.findOne(postId);
+        if(post == null) {
+            throw new ResourceNotFoundException("Post with id " + postId + " not found!");
+        }
+
+        model.addAttribute("post", post);
+        return "post/details";
     }
 
     @GetMapping("/login")
