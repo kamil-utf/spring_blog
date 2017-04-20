@@ -14,7 +14,7 @@ public class AppInitializer implements WebApplicationInitializer {
 	private static final String CONFIG_LOCATION = "com.example.blog.config";
 	private static final String MAPPING_URL = "/";
 
-	private static final int MAX_UPLOAD_SIZE = 10 * 1024 * 1024; // 5 MB
+	private static final int MAX_UPLOAD_SIZE = 10 * 1024 * 1024;	// 10MB
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
