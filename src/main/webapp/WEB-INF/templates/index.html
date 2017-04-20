@@ -27,25 +27,60 @@
 
                 <ul class="pagination">
                     <li th:classappend="${current == 1} ? 'disabled' : ''">
-                        <a th:href="@{${current == 1} ? '#' : '/posts/' + ${current - 1}}">
+                        <span th:if="${current == 1}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </span>
+                        <a th:unless="${current == 1}" th:href="@{'/posts/' + ${current - 1}}">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     <li th:each="i : ${#numbers.sequence(begin, end)}" th:classappend="${i == current} ? 'active' : ''">
-                        <a th:href="@{'/posts/' + ${i}}" th:text="${i}">index</a>
+                        <span th:if="${i == current}" th:text="${i}">1</span>
+                        <a th:unless="${i == current}" th:href="@{'/posts/' + ${i}}" th:text="${i}">1</a>
                     </li>
                     <li th:classappend="${current == posts.totalPages} ? 'disabled' : ''">
-                       <a th:href="@{${current == posts.totalPages} ? '#' : '/posts/' + ${current + 1}}">
+                        <span th:if="${current == posts.totalPages}">
                            <span aria-hidden="true">&raquo;</span>
-                       </a>
+                        </span>
+                        <a th:unless="${current == posts.totalPages}" th:href="@{'/posts/' + ${current + 1}}">
+                           <span aria-hidden="true">&raquo;</span>
+                        </a>
                     </li>
                 </ul>
             </div>
 
             <div class="col-md-4">
-
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Blog Search
+                    </div>
+                    <div class="panel-body">
+                        <input type="text" class="form-control" id="searchForm"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <script layout:fragment="script">
+        $(document).ready(function() {
+            $('#searchForm').autocomplete({
+                minLength: 2,
+                source: function(request, response) {
+                    $.getJSON('/posts/autocomplete', request, function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                value: item.title,
+                                url: '/posts/' + item.id + '/details'
+                            }
+                        }));
+                    })
+                },
+                select: function(event, ui) {
+                    window.location.href = ui.item.url;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

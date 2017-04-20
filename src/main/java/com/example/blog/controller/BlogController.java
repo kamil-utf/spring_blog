@@ -5,17 +5,17 @@ import com.example.blog.model.Post;
 import com.example.blog.model.User;
 import com.example.blog.service.PostService;
 import com.example.blog.service.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -59,6 +59,12 @@ public class BlogController {
 
         model.addAttribute("post", post);
         return "post/details";
+    }
+
+    @JsonView(Post.View.class)
+    @GetMapping("/posts/autocomplete")
+    public @ResponseBody List<Post> autoComplete(@RequestParam("term") String query) {
+        return postService.findByTitleContaining(query);
     }
 
     @GetMapping("/login")

@@ -56,7 +56,7 @@ public class UserController {
         if(result.hasErrors()) {
             return "user/edit";
         }
-
+        
         userService.update(user);
         return "redirect:" + ADMIN_PREFIX;
     }

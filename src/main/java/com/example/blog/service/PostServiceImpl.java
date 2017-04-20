@@ -41,6 +41,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> findByTitleContaining(final String title) {
+        return postRepository.findByTitleContaining(title);
+    }
+
+    @Override
     public void saveOrUpdate(final Post post) {
         Long postId = post.getId();
         Post existing = postId != null ? findOne(postId) : null;

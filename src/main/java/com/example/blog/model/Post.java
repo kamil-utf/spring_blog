@@ -1,5 +1,6 @@
 package com.example.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedBy;
@@ -18,12 +19,16 @@ import java.util.Date;
 @DynamicUpdate
 public class Post {
 
+    public interface View {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(View.class)
     private Long id;
 
     @NotNull
     @Size(min = 5, max = 50)
+    @JsonView(View.class)
     private String title;
 
     @Lob
