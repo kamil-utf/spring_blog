@@ -16,8 +16,10 @@
                         , on <span class="glyphicon glyphicon-time"></span>
                         <th:block th:text="${#dates.format(post.createdDate, 'dd/MM/yyyy HH:mm')}">Created date</th:block>
                     </p>
-                    <hr>
-                    ...
+                    <th:block th:if="${post.image}">
+                        <hr>
+                        <img class="img-responsive" th:src="@{'/posts/' + ${post.id} + '/image'}" alt="image"/>
+                    </th:block>
                     <hr>
                     <p th:utext="${#strings.abbreviate(post.content, 400)}">Blog post content</p>
                     <a th:href="@{'/posts/' + ${post.id} + '/details'}" class="btn btn-primary">

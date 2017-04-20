@@ -8,6 +8,9 @@ import com.example.blog.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -65,6 +68,14 @@ public class BlogController {
     @GetMapping("/posts/autocomplete")
     public @ResponseBody List<Post> autoComplete(@RequestParam("term") String query) {
         return postService.findByTitleContaining(query);
+    }
+
+    @GetMapping("/posts/{postId}/image")
+    public ResponseEntity<byte[]> loadImage(@PathVariable Long postId) {
+        Post post = postService.findOne(postId);
+        return new ResponseEntity<>(
+                post != null ? post.getImage() : null, new HttpHeaders(), HttpStatus.OK
+        );
     }
 
     @GetMapping("/login")

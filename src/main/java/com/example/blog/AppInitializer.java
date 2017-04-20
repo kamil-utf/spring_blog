@@ -7,16 +7,15 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.*;
 
 public class AppInitializer implements WebApplicationInitializer {
 
 	private static final String CONFIG_LOCATION = "com.example.blog.config";
 	private static final String MAPPING_URL = "/";
-	
+
+	private static final int MAX_UPLOAD_SIZE = 10 * 1024 * 1024; // 5 MB
+
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		WebApplicationContext webContext = getWebContext();
@@ -26,6 +25,12 @@ public class AppInitializer implements WebApplicationInitializer {
                 servletContext.addServlet("dispatcherServlet", new DispatcherServlet(webContext));
 		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping(MAPPING_URL);
+
+		// Multipart Config Element
+		MultipartConfigElement multipartConfigElement
+				= new MultipartConfigElement(System.getProperty("java.io.tmpdir"),
+						MAX_UPLOAD_SIZE, MAX_UPLOAD_SIZE * 2, MAX_UPLOAD_SIZE / 2);
+		dispatcher.setMultipartConfig(multipartConfigElement);
 
 		// Hidden Http Method Filter
 		FilterRegistration.Dynamic hiddenHttpMethodFilter
@@ -38,5 +43,4 @@ public class AppInitializer implements WebApplicationInitializer {
 		webContext.setConfigLocation(CONFIG_LOCATION);
 		return webContext;
 	}
-
 }

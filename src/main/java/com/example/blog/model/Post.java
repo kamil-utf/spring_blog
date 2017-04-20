@@ -35,6 +35,9 @@ public class Post {
     @NotBlank
     private String content;
 
+    @Lob
+    private byte[] image;
+
     @ManyToOne
     @CreatedBy
     private User author;
@@ -69,6 +72,14 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public User getAuthor() {

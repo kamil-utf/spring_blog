@@ -16,16 +16,16 @@
                         , on <span class="glyphicon glyphicon-time"></span>
                         <th:block th:text="${#dates.format(post.createdDate, 'dd/MM/yyyy HH:mm')}">Created date</th:block>
                     </p>
-                    <hr>
-                    ...
+                    <th:block th:if="${post.image}">
+                        <hr>
+                        <img class="img-responsive" th:src="@{'/posts/' + ${post.id} + '/image'}" alt="image"/>
+                    </th:block>
                     <hr>
                     <p th:utext="${post.content}">Blog post content</p>
                 </article>
             </div>
 
-            <div class="col-md-4">
-
-            </div>
+            <div class="col-md-4"></div>
         </div>
     </div>
 </body>

@@ -3,13 +3,16 @@ package com.example.blog.controller;
 import com.example.blog.exception.ResourceNotFoundException;
 import com.example.blog.model.Post;
 import com.example.blog.service.PostService;
+import com.example.blog.util.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequestMapping(PostController.WRITER_PREFIX)
@@ -48,9 +51,18 @@ public class PostController {
 	}
 
 	@PostMapping
-	public String storePost(@Valid Post post, BindingResult result) {
+	public String storePost(@Valid Post post, BindingResult result,
+							@RequestParam(value = "file", required = false) MultipartFile file) {
 		if(result.hasErrors()) {
 			return "post/createOrEdit";
+		}
+
+		if(!file.isEmpty()) {
+			try {
+				post.setImage(ImageUtils.createImageForPost(file));
+			} catch(IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 
 		postService.saveOrUpdate(post);

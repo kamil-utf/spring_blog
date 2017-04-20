@@ -18,8 +18,9 @@
         </div>
         <div class="row v-offset-15">
             <div class="col-md-9">
-                <form th:action="@{/writer/posts}" th:object="${post}" method="post" class="form-horizontal">
+                <form th:action="@{/writer/posts}" th:object="${post}" method="post" enctype="multipart/form-data" class="form-horizontal">
                     <input th:if="${post.id}" type="hidden" th:field="*{id}"/>
+                    <input th:if="${post.image}" type="hidden" th:field="*{image}"/>
 
                     <div class="form-group" th:classappend="${#fields.hasErrors('title')} ? 'has-error' : ''">
                         <label for="title" class="col-md-2 control-label">Title: </label>
@@ -40,11 +41,19 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="image" class="col-md-2 control-label">Image: </label>
+                        <div class="col-md-10">
+                            <input type="file" class="form-control" id="image" name="file"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <a th:href="@{/writer/posts}" class="btn btn-default">Cancel</a>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
+
                 </form>
             </div>
 
