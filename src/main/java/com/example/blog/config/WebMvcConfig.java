@@ -40,12 +40,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public ThymeleafViewResolver viewResolver() {
-		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-		viewResolver.setTemplateEngine(templateEngine());
-		viewResolver.setContentType("text/html; charset=UTF-8");
-		viewResolver.setCharacterEncoding("UTF-8");
-		return viewResolver;
+	public SpringResourceTemplateResolver templateResolver() {
+		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+		templateResolver.setPrefix("/WEB-INF/templates/");
+		templateResolver.setSuffix(".html");
+		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
+		return templateResolver;
 	}
 
 	@Bean
@@ -59,13 +60,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public SpringResourceTemplateResolver templateResolver() {
-		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-		templateResolver.setPrefix("/WEB-INF/templates/");
-		templateResolver.setSuffix(".html");
-		templateResolver.setTemplateMode(TemplateMode.HTML);
-		templateResolver.setCharacterEncoding("UTF-8");
-		return templateResolver;
+	public ThymeleafViewResolver viewResolver() {
+		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+		viewResolver.setTemplateEngine(templateEngine());
+		viewResolver.setContentType("text/html; charset=UTF-8");
+		viewResolver.setCharacterEncoding("UTF-8");
+		return viewResolver;
 	}
 
 	@Bean
