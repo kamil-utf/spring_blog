@@ -65,6 +65,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		viewResolver.setTemplateEngine(templateEngine());
 		viewResolver.setContentType("text/html; charset=UTF-8");
 		viewResolver.setCharacterEncoding("UTF-8");
+		viewResolver.setOrder(0);
 		return viewResolver;
 	}
 

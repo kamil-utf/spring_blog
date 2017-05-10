@@ -94,19 +94,6 @@ public class UserControllerTest {
     }
 
     @Test
-    public void updateShouldUpgradeUserData() throws Exception {
-        User user = createUserWithExistingID();
-
-        doNothing().when(userService).update(any(User.class));
-
-        mockMvc.perform(put(UserController.ADMIN_PREFIX + "/{userId}", user.getId()))
-                .andExpect(redirectedUrl(UserController.ADMIN_PREFIX));
-
-        verify(userService, times(1)).update(any(User.class));
-        verifyNoMoreInteractions(userService);
-    }
-
-    @Test
     public void removeShouldDeletePostIfExistingID() throws Exception {
         User user = createUserWithExistingID();
 

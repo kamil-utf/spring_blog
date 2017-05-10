@@ -21,7 +21,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebAppConfiguration
@@ -98,17 +99,6 @@ public class PostControllerTest {
     }
 
     @Test
-    public void storeShouldSaveOrUpdatePost() throws Exception {
-        doNothing().when(postService).saveOrUpdate(any(Post.class));
-
-        mockMvc.perform(post(PostController.WRITER_PREFIX))
-                .andExpect(redirectedUrl(PostController.WRITER_PREFIX));
-
-        verify(postService, times(1)).saveOrUpdate(any(Post.class));
-        verifyNoMoreInteractions(postService);
-    }
-
-    @Test
     public void removeShouldDeletePostIfExistingID() throws Exception {
         Post post = createPostWithExistingID();
 
@@ -136,14 +126,14 @@ public class PostControllerTest {
         verifyNoMoreInteractions(postService);
     }
 
-    private Post createPostWithExistingID() {
+    public static Post createPostWithExistingID() {
         Post post = new Post();
         post.setId(1L);
 
         return post;
     }
 
-    private Post createPostWithNonExistingID() {
+    public static Post createPostWithNonExistingID() {
         Post post = new Post();
         post.setId(Long.MAX_VALUE);
 
