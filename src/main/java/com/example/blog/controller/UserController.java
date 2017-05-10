@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/{userId}/edit")
     public String editUser(@PathVariable Long userId, Model model) throws ResourceNotFoundException {
-        User user = userService.findOne(userId);
+        User user = userService.findById(userId);
         if(user == null) {
             throw new ResourceNotFoundException("User with id " + userId + " not found!");
         }
@@ -62,16 +62,22 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public String removeUser(@PathVariable Long userId) {
-        User user = userService.findOne(userId);
+    public String removeUser(@PathVariable Long userId) throws ResourceNotFoundException {
+        User user = userService.findById(userId);
+        if(user == null) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found!");
+        }
 
         userService.delete(user);
         return "redirect:" + ADMIN_PREFIX;
     }
 
     @PostMapping("/{userId}/passwd")
-    public String resetUserPassword(@PathVariable Long userId) {
-        User user = userService.findOne(userId);
+    public String resetUserPassword(@PathVariable Long userId) throws ResourceNotFoundException {
+        User user = userService.findById(userId);
+        if(user == null) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found!");
+        }
 
         userService.resetPassword(user);
         return "redirect:" + ADMIN_PREFIX;
