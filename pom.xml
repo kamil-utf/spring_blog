@@ -137,6 +137,14 @@
             <version>2.7.22</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Expression language -->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
