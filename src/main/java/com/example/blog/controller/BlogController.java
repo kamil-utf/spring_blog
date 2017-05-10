@@ -55,7 +55,7 @@ public class BlogController {
 
     @GetMapping("/posts/{postId}/details")
     public String showPost(@PathVariable Long postId, Model model) throws ResourceNotFoundException {
-        Post post = postService.findOne(postId);
+        Post post = postService.findById(postId);
         if(post == null) {
             throw new ResourceNotFoundException("Post with id " + postId + " not found!");
         }
@@ -72,7 +72,7 @@ public class BlogController {
 
     @GetMapping("/posts/{postId}/image")
     public ResponseEntity<byte[]> loadImage(@PathVariable Long postId) {
-        Post post = postService.findOne(postId);
+        Post post = postService.findById(postId);
         return new ResponseEntity<>(
                 post != null ? post.getImage() : null, new HttpHeaders(), HttpStatus.OK
         );

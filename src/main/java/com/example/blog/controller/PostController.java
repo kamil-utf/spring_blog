@@ -41,7 +41,7 @@ public class PostController {
 
 	@GetMapping("/{postId}/edit")
 	public String editPost(@PathVariable Long postId, Model model) throws ResourceNotFoundException {
-		Post post = postService.findOne(postId);
+		Post post = postService.findById(postId);
 		if(post == null) {
 			throw new ResourceNotFoundException("Post with id " + postId + " not found!");
 		}
@@ -57,7 +57,7 @@ public class PostController {
 			return "post/createOrEdit";
 		}
 
-		if(!file.isEmpty()) {
+		if(file != null && !file.isEmpty()) {
 			try {
 				post.setImage(ImageUtils.createImageForPost(file));
 			} catch(IOException ex) {
@@ -71,7 +71,10 @@ public class PostController {
 
 	@DeleteMapping("/{postId}")
 	public String removePost(@PathVariable Long postId) {
-		Post post = postService.findOne(postId);
+		Post post = postService.findById(postId);
+		if(post == null) {
+			throw new ResourceNotFoundException("Post with id " + postId + " not found!");
+		}
 
 		postService.delete(post);
 		return "redirect:" + WRITER_PREFIX;
