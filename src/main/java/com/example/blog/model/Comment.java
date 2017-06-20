@@ -1,7 +1,5 @@
 package com.example.blog.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,38 +7,32 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "posts")
-@DynamicUpdate
-public class Post {
-
-    public interface View {}
+@Table(name = "comments")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(View.class)
     private Long id;
 
-    @NotNull
-    @Size(min = 5, max = 50)
-    @JsonView(View.class)
-    private String title;
-
-    @Lob
     @NotBlank
     private String content;
 
-    @Lob
-    private byte[] image;
+    private boolean enabled = true;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     private Set<Comment> comments;
 
     @ManyToOne
@@ -63,14 +55,6 @@ public class Post {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContent() {
         return content;
     }
@@ -79,12 +63,28 @@ public class Post {
         this.content = content;
     }
 
-    public byte[] getImage() {
-        return image;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public Comment getParent() {
+        return parent;
+    }
+
+    public void setParent(Comment parent) {
+        this.parent = parent;
     }
 
     public Set<Comment> getComments() {
@@ -117,5 +117,9 @@ public class Post {
 
     public void setLastModifiedDate(Date lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public boolean hasParent() {
+        return parent != null;
     }
 }

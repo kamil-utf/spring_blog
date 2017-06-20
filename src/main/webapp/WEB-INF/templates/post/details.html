@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="master">
 <head>
     <title>Posts</title>
@@ -22,10 +23,57 @@
                     </th:block>
                     <hr>
                     <p th:utext="${post.content}">Blog post content</p>
+                    <hr>
+                    <div sec:authorize="isAuthenticated()" class="well">
+                        <h4>Post a Comment:</h4>
+                        <form th:action="@{'/posts/' + ${post.id} + '/comment'}" th:object="${newComment}" method="post">
+                            <div class="form-group">
+                                <textarea class="form-control" th:field="*{content}" rows="3"></textarea>
+                                <span th:if="${#fields.hasErrors('content')}" class="help-block" th:errors="*{content}"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div sec:authorize="isAnonymous()" class="well">
+                        <span>
+                            <a th:href="@{/login}">Log in</a> or
+                            <a th:href="@{/register}">register</a> to post comments
+                        </span>
+                    </div>
+                    <hr>
+                    <th:block th:each="comment : ${comments}">
+                        <th:block layout:insert="fragments/comment :: comment(${comment})"></th:block>
+                    </th:block>
                 </article>
             </div>
 
-            <div class="col-md-4"></div>
+            <div sec:authorize="isAuthenticated()" id="addReplay" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3>Add Reply</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="replayForm" th:action="@{/}" th:object="${newComment}" method="post">
+                                <div class="form-group">
+                                    <textarea class="form-control" th:field="*{content}" rows="3"></textarea>
+                                    <span th:if="${#fields.hasErrors('content')}" class="help-block" th:errors="*{content}"></span>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script layout:fragment="script">
+        $('#addReplay').on('show.bs.modal', function(event) {
+            $('#replayForm').attr('action', $(event.relatedTarget).data('url'));
+        });
+    </script>
 </body>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+    <div layout:fragment="comment(mComment)" class="media">
+        <div class="media-left">
+            <img th:src="@{/static/img/avatar.png}" style="width: 64px" alt="avatar" />
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading">
+                <span th:text="${mComment.author.username}">Author</span>
+                <small><i>Posted on
+                    <span th:text="${#dates.format(mComment.createdDate, 'dd/MM/yyyy HH:mm')}"></span>
+                </i></small>
+            </h4>
+            <p th:with="isWriter=${#authorization.expression('hasRole(''WRITER'')')}">
+                <th:block th:if="${isWriter || mComment.enabled}" th:text="${mComment.content}">
+                    Content
+                </th:block>
+                <span th:unless="${isWriter || mComment.enabled}" class="text-warning">
+                    This message contains content that has been blocked.
+                </span>
+            </p>
+            <a sec:authorize="isAuthenticated()" href="#" data-toggle="modal" data-target="#addReplay"
+               th:attr="data-url=@{'/posts/' + ${mComment.post.id} + '/comment/' + ${mComment.id}}">
+                Reply
+            </a>
+            <a sec:authorize="hasRole('WRITER')" style="text-decoration: none; padding-left: 10px;"
+               th:href="@{'/writer/comments/' + ${mComment.id} + '/status'}">
+                <span class="text-danger" th:if="${mComment.enabled}">Disable</span>
+                <span class="text-success" th:unless="${mComment.enabled}">Enable</span>
+            </a>
+            <th:block th:each="comment : ${mComment.comments}">
+                <th:block layout:insert="fragments/comment :: comment(${comment})"></th:block>
+            </th:block>
+        </div>
+    </div>
+</body>
+</html>
