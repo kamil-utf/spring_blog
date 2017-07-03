@@ -40,7 +40,9 @@ public class Post {
     @Lob
     private byte[] image;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany( mappedBy = "post",
+                fetch = FetchType.EAGER,
+                cascade = CascadeType.REMOVE)
     private Set<Comment> comments;
 
     @ManyToOne
